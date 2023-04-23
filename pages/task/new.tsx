@@ -16,7 +16,7 @@ const NewTask: React.FC = () => {
       method: "POST",
       body: JSON.stringify({ name, base, units, taskList }),
     });
-    router.push("/taskList");
+    router.push(`/taskList/${taskList}`);
   };
 
   const isSubmitDisabled =
