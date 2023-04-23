@@ -96,6 +96,7 @@ const CreateTaskButton: React.FC<CreateTaskButtonProps> = (props) => {
     <Button
       onClick={() => router.push(`/task/new?taskList=${props.taskListId}`)}
       className="ml-auto mr-0"
+      size="sm"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

@@ -78,6 +78,7 @@ const CreateTaskListButton: React.FC = () => {
     <Button
       onClick={() => router.push("/taskList/new")}
       className="ml-auto mr-0"
+      size="sm"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
