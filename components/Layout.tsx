@@ -3,12 +3,22 @@ import Header from "./Header";
 
 type Props = {
   children: ReactNode;
+  title: string;
+  subtitle?: string;
 };
 
 const Layout: React.FC<Props> = (props) => (
-  <div>
+  <div className="screen">
     <Header />
-    <div className="layout">{props.children}</div>
+    <div className="layout">
+      <h1 className="text-2xl mb-2">{props.title}</h1>
+      {props.subtitle ? (
+        <h1 className="text-lg mb-2">{props.subtitle}</h1>
+      ) : (
+        <></>
+      )}
+      {props.children}
+    </div>
     <style jsx global>{`
       html {
         box-sizing: border-box;
@@ -29,19 +39,17 @@ const Layout: React.FC<Props> = (props) => (
           "Segoe UI Symbol";
         background: rgba(0, 0, 0, 0.05);
       }
-
-      input,
-      textarea {
-        font-size: 16px;
-      }
-
-      button {
-        cursor: pointer;
-      }
     `}</style>
     <style jsx>{`
       .layout {
         padding: 0 2rem;
+      }
+      @media screen and (min-width: 1024px) {
+        .screen {
+          margin: auto;
+          width: 80%;
+          max-width: 1024px;
+        }
       }
     `}</style>
   </div>

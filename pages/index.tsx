@@ -1,13 +1,17 @@
 import React from "react";
 import type { GetStaticProps } from "next";
 import Layout from "../components/Layout";
-import Post, { PostProps } from "../components/Post";
-import prisma from '../lib/prisma'
+import { PostProps } from "../components/Post";
+import { Button, Card } from "flowbite-react";
+import prisma from "../lib/prisma";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+import Login from "../components/Login";
+import { Router, useRouter } from "next/router";
 
 export const getStaticProps: GetStaticProps = async () => {
- 
   return {
-    props: {  },
+    props: {},
     revalidate: 10,
   };
 };
@@ -16,31 +20,21 @@ type Props = {
   feed: PostProps[];
 };
 
-const Blog: React.FC<Props> = (props) => {
+const Home: React.FC<Props> = (props) => {
+  const session = useSession();
+  const router = useRouter();
+  if (session.data?.user) {
+    router.push("/taskList");
+  }
   return (
-    <Layout>
+    <Layout title="">
       <div className="page">
-        <h1>Public Feed</h1>
-        <main>
-          
+        <main className="h-screen flex justify-center items-center">
+          {session.data ? <></> : <Login />}
         </main>
       </div>
-      <style jsx>{`
-        .post {
-          background: white;
-          transition: box-shadow 0.1s ease-in;
-        }
-
-        .post:hover {
-          box-shadow: 1px 1px 3px #aaa;
-        }
-
-        .post + .post {
-          margin-top: 2rem;
-        }
-      `}</style>
     </Layout>
   );
 };
 
-export default Blog;
+export default Home;
