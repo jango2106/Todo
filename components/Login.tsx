@@ -7,7 +7,8 @@ const Login: React.FC = () => {
   return (
     <Card>
       <h1>
-        Welcome to the To Do App... its not done yet but feel free to login
+        Prioritized Todo List... its not done yet but feel free to login and
+        mess with it
       </h1>
       <Link href="/api/auth/signin">
         <Button color="dark">

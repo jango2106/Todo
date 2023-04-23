@@ -26,29 +26,24 @@ const NewTask: React.FC = () => {
     <Layout title="Add New Task">
       <Card>
         <form className="flex flex-col gap-4" onSubmit={null}>
-          <div className="flex flex-row">
-            <div className="basis-1/2">
-              <div className="mb-2 block">
-                <Label htmlFor="name" value="Task Name" />
-              </div>
-              <TextInput
-                id="name"
-                type="text"
-                placeholder="My Cool Task"
-                required={true}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
+          <div className=" flex-row">
+            <div className="mb-2 block">
+              <Label htmlFor="name" value="Task Name" />
             </div>
+            <TextInput
+              id="name"
+              type="text"
+              placeholder="My Cool Task"
+              required={true}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
           <div className="flex flex-row gap-2">
-            <div className="flex-col basis-1/4">
+            <div className="flex-col ">
               <div id="select">
                 <div className="mb-2 block">
-                  <Label
-                    htmlFor="frequencyBase"
-                    value="Select repeat frequency"
-                  />
+                  <Label htmlFor="frequencyBase" value="Repeat Frequency" />
                 </div>
                 <Select
                   id="frequencyBase"
@@ -66,7 +61,7 @@ const NewTask: React.FC = () => {
                 </Select>
               </div>
             </div>
-            <div className="flex-col basis-1/4">
+            <div className="flex-col">
               <div className="mb-2 block">
                 <Label htmlFor="name" value="Count" />
               </div>
