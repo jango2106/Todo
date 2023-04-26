@@ -1,13 +1,9 @@
 import React from "react";
 import type { GetStaticProps } from "next";
 import Layout from "../components/Layout";
-import { PostProps } from "../components/Post";
-import { Button, Card } from "flowbite-react";
-import prisma from "../lib/prisma";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
 import Login from "../components/Login";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -16,11 +12,7 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-type Props = {
-  feed: PostProps[];
-};
-
-const Home: React.FC<Props> = (props) => {
+const Home: React.FC = () => {
   const session = useSession();
   const router = useRouter();
   if (session.data?.user) {
