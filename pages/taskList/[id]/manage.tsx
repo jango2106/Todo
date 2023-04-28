@@ -6,6 +6,7 @@ import Layout from "../../../components/Layout";
 import { Accordion, Button, ButtonProps, Card } from "flowbite-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { Input } from "../../api/task/delete";
 
 export const getServerSideProps: GetServerSideProps = async ({
   params,
@@ -65,11 +66,17 @@ const ManageTasks: React.FC<Props> = (props) => {
           className="ml-auto"
           selectedTaskIds={selectedTaskIds}
         />
-        <TasksAccordion
-          tasks={tasks}
-          selectedTaskIds={selectedTaskIds}
-          onToggleFunction={setSelectedTaskIds}
-        />
+        <Card className="mt-3">
+          {tasks.length > 0 ? (
+            <TasksAccordion
+              tasks={tasks}
+              selectedTaskIds={selectedTaskIds}
+              onToggleFunction={setSelectedTaskIds}
+            />
+          ) : (
+            <div className="text-lg text-center ">No tasks found</div>
+          )}
+        </Card>
       </Layout>
     </>
   );
@@ -94,7 +101,7 @@ const TasksAccordion: React.FC<TaskAccordionProps> = (props) => {
     <Accordion collapseAll={true}>
       {tasks.map((it) => (
         <Accordion.Panel>
-          <Accordion.Title className="w-full">
+          <Accordion.Title className="w-full bg-slate-300">
             <div className="flex justify-between items-center">
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
@@ -107,7 +114,9 @@ const TasksAccordion: React.FC<TaskAccordionProps> = (props) => {
               </div>
             </div>
           </Accordion.Title>
-          <Accordion.Content>{it.frequencyBase}</Accordion.Content>
+          <Accordion.Content className="bg-slate-100">
+            {it.frequencyBase}
+          </Accordion.Content>
         </Accordion.Panel>
       ))}
     </Accordion>
@@ -119,12 +128,16 @@ type DeleteSelectedButtonProps = {
 } & ButtonProps;
 
 const DeleteSelectedButton: React.FC<DeleteSelectedButtonProps> = (props) => {
+  const { selectedTaskIds } = props;
+
   const router = useRouter();
 
-  const handleOnClick = () => {
-    // delete all the ids
-    console.log("Delete the following props");
-    console.log(props.selectedTaskIds);
+  const handleOnClick = async () => {
+    await fetch("/api/task/delete", {
+      method: "POST",
+      body: JSON.stringify({ tasksIds: selectedTaskIds } as Input),
+    });
+    router.reload();
   };
 
   return (
