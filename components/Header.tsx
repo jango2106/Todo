@@ -5,10 +5,8 @@ import { Button } from "flowbite-react";
 
 const Header: React.FC = () => {
   const router = useRouter();
-  const isActive: (pathname: string) => boolean = (pathname) =>
-    router.pathname === pathname;
 
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const userDetails = (
     <div className="justify-self-end flex gap-2 items-center">
@@ -27,9 +25,11 @@ const Header: React.FC = () => {
       </Button>
     </div>
   );
+  const excludedPaths = ["taskList"];
+  const hideButton = excludedPaths.includes(router.pathname.split("/").pop());
 
   const backButton = (
-    <div className="justify-self-start">
+    <div className={`justify-self-start ${hideButton ? "invisible" : ""}`}>
       <Button onClick={() => router.back()}>
         <svg
           xmlns="http://www.w3.org/2000/svg"

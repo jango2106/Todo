@@ -11,35 +11,14 @@ const Layout: React.FC<Props> = (props) => (
   <div className="screen">
     <Header />
     <div className="layout">
-      <h1 className="text-2xl mb-2">{props.title}</h1>
+      <h1 className="text-2xl mb-2 font-bold">{props.title}</h1>
       {props.subtitle ? (
-        <h1 className="text-lg mb-2">{props.subtitle}</h1>
+        <p className="text-lg mb-2 text-italic">{props.subtitle}</p>
       ) : (
         <></>
       )}
       {props.children}
     </div>
-    <style jsx global>{`
-      html {
-        box-sizing: border-box;
-      }
-
-      *,
-      *:before,
-      *:after {
-        box-sizing: inherit;
-      }
-
-      body {
-        margin: 0;
-        padding: 0;
-        font-size: 16px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-          "Segoe UI Symbol";
-        background: rgba(0, 0, 0, 0.05);
-      }
-    `}</style>
     <style jsx>{`
       .layout {
         padding: 0 2rem;
@@ -50,6 +29,9 @@ const Layout: React.FC<Props> = (props) => (
           width: 80%;
           max-width: 1024px;
         }
+      }
+      .text-italic {
+        font-style: italic;
       }
     `}</style>
   </div>
