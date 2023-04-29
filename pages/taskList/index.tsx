@@ -56,7 +56,10 @@ const ToDoLists: React.FC<Props> = (props) => {
 
 const ListCards: React.FC<Props> = (props) => {
   const router = useRouter();
-
+  const deleteTaskList = async (id: string) => {
+    await fetch(`/api/taskList/${id}/delete`);
+    router.push(router.asPath);
+  };
   return (
     <>
       {props.lists.map((it) => (
@@ -65,7 +68,19 @@ const ListCards: React.FC<Props> = (props) => {
           key={it.id}
           onClick={() => router.push(`/taskList/${it.id}`)}
         >
-          {it.name}
+          <div className="flex justify-between items-center">
+            <p className="w-full h-full">{it.name}</p>
+            <Button
+              color="failure"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteTaskList(it.id);
+              }}
+            >
+              Delete
+            </Button>
+          </div>
         </Card>
       ))}
     </>

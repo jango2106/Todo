@@ -4,12 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 
 type EditTaskScreenProps = {
-  onSubmit: (
-    name: string,
-    base: FrequencyBase,
-    units: number,
-    taskListId?: string
-  ) => void;
+  onSubmit: (name: string, base: FrequencyBase, units: number) => void;
   currentValues?: {
     name: string;
     base: FrequencyBase;

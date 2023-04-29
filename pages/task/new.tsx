@@ -5,12 +5,12 @@ import Layout from "../../components/Layout";
 
 const NewTask: React.FC = () => {
   const router = useRouter();
+  const { taskList } = router.query;
 
   const createNewTask = async (
     name: string,
     base: FrequencyBase,
-    units: Number,
-    taskList: string
+    units: Number
   ) => {
     await fetch("/api/task/create", {
       method: "POST",
