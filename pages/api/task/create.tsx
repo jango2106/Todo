@@ -27,7 +27,11 @@ export default async function completed(
       name: body.name,
       frequencyBase: body.base as FrequencyBase,
       frequencyUnits: body.units,
-      taskListId: body.taskList,
+      taskList: {
+        connect: {
+          id: body.taskList,
+        },
+      },
       nextScheduledDate: moment.utc().toISOString(),
     },
   });
