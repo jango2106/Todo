@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { FrequencyBase } from "@prisma/client";
 import EditTaskScreen from "../../components/EditTaskScreen";
+import Layout from "../../components/Layout";
 
 const NewTask: React.FC = () => {
   const router = useRouter();
@@ -23,7 +24,11 @@ const NewTask: React.FC = () => {
     router.push(`/taskList/${taskList}`);
   };
 
-  return <EditTaskScreen title="Add New Task" onSubmit={createNewTask} />;
+  return (
+    <Layout title="Add New Task">
+      <EditTaskScreen onSubmit={createNewTask} />
+    </Layout>
+  );
 };
 
 export default NewTask;
