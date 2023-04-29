@@ -2,6 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "flowbite-react";
+import { backButtonMappings } from "../constants/routes";
 
 const Header: React.FC = () => {
   const router = useRouter();
@@ -28,9 +29,14 @@ const Header: React.FC = () => {
   const excludedPaths = ["taskList"];
   const hideButton = excludedPaths.includes(router.pathname.split("/").pop());
 
+  const handleBack = () => {
+    const newPath = backButtonMappings.get(router.route)?.(router.asPath);
+    newPath ? router.push(newPath) : router.back();
+  };
+
   const backButton = (
     <div className={`justify-self-start ${hideButton ? "invisible" : ""}`}>
-      <Button onClick={() => router.back()}>
+      <Button onClick={() => handleBack()}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
