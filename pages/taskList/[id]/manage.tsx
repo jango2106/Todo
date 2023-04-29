@@ -7,6 +7,7 @@ import { Accordion, Button, ButtonProps, Card } from "flowbite-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Input } from "../../api/task/delete";
+import { formatDate, isDateBeforeDefaultTime } from "../../../utils/date";
 
 export const getServerSideProps: GetServerSideProps = async ({
   params,
@@ -111,41 +112,69 @@ const TasksAccordion: React.FC<TaskAccordionProps> = (props) => {
     <Accordion collapseAll={true}>
       {tasks.map((it) => (
         <Accordion.Panel>
-          <Accordion.Title className="w-full bg-slate-300">
-            <div className="flex justify-between items-center">
-              <div className="flex flex-col">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    onClick={() => toggleCheckbox(it.id)}
-                  ></input>
-                  <Button
-                    onClick={() => {
-                      handleDelete(it.id);
-                    }}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                      />
-                    </svg>
-                  </Button>
-                  {it.name}
-                </div>
-              </div>
+          <Accordion.Title className="bg-slate-300 justify-start">
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                onClick={() => toggleCheckbox(it.id)}
+              ></input>
+              <span>{it.name}</span>
             </div>
           </Accordion.Title>
           <Accordion.Content className="bg-slate-100">
-            {it.frequencyBase}
+            <div className="flex flex-col flex-wrap w-full">
+              <TaskDetailInput
+                id={it.id + "-base"}
+                title="Frequency:"
+                content={it.frequencyBase.toLocaleLowerCase()}
+              />
+              <TaskDetailInput
+                id={it.id + "-count"}
+                title="Frequency Count:"
+                content={String(it.frequencyUnits)}
+              />
+              <TaskDetailInput
+                id={it.id + "-next"}
+                title="Next Scheduled Time:"
+                content={formatDate(new Date(it.nextScheduledDate))}
+              />
+
+              <TaskDetailInput
+                id={it.id + "-last"}
+                title="Last Time Completed:"
+                content={String(
+                  isDateBeforeDefaultTime(it.lastCompletedDate)
+                    ? "None"
+                    : formatDate(it.lastCompletedDate)
+                )}
+              />
+            </div>
+            <div className="flex w-full justify-end mt-5 gap-2">
+              <Button
+                className="w-full"
+                size="sm"
+                onClick={() => {
+                  null;
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                  />
+                </svg>
+
+                <span className="px-1">Edit</span>
+              </Button>
+            </div>
           </Accordion.Content>
         </Accordion.Panel>
       ))}
@@ -175,6 +204,7 @@ const DeleteSelectedButton: React.FC<DeleteSelectedButtonProps> = (props) => {
       onClick={() => handleOnClick()}
       className="m-auto mr-0"
       size="sm"
+      color="failure"
       disabled={props.selectedTaskIds?.length === 0}
     >
       <svg
@@ -183,7 +213,7 @@ const DeleteSelectedButton: React.FC<DeleteSelectedButtonProps> = (props) => {
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="w-6 h-6"
+        className="mr-1 w-6 h-6"
       >
         <path
           strokeLinecap="round"
@@ -193,6 +223,23 @@ const DeleteSelectedButton: React.FC<DeleteSelectedButtonProps> = (props) => {
       </svg>
       Delete Selected
     </Button>
+  );
+};
+
+type TaskDetailInpuProps = {
+  content: string;
+  id: string;
+  title: string;
+};
+const TaskDetailInput: React.FC<TaskDetailInpuProps> = (props) => {
+  const { content, id, title } = props;
+  return (
+    <div className="my-2">
+      <label className="block font-bold" htmlFor={id}>
+        {title}
+      </label>
+      <input value={content} id={id} className="border" disabled />
+    </div>
   );
 };
 

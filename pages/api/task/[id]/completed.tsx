@@ -49,7 +49,6 @@ export default async function completed(
               task.frequencyUnits,
               task.frequencyBase.toLocaleLowerCase() as momentBases
             )
-            .startOf("day")
             .toISOString(),
         },
       });
