@@ -197,8 +197,7 @@ const TaskDetailsContent: React.FC<TaskDetailsContentProps> = (props) => {
   const handleUpdate = async (
     name: string,
     base: FrequencyBase,
-    units: number,
-    _
+    units: number
   ) => {
     const { id } = task;
     await fetch(`/api/task/${id}/update`, {
