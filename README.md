@@ -1,6 +1,6 @@
-# Fullstack Authentication Example with Next.js and NextAuth.js
+# To-Do with Next.js and NextAuth.js on Railway
 
-With Railway Integration
+This is a simple project that I made to help me with recurring tasks in life. I couldn't find a self prioritizing task list in any apps or other tools that I could find, so I built this! ToDo allows you to set up a bunch of recurring chores or tasks and will prioritize them based on frequency and date since last completion. 
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fprisma%2Ffullstack-prisma-nextjs-blog&env=SECRET,GITHUB_ID,GITHUB_SECRET&project-name=fullstack-prisma-nextjs-blog&repo-name=fullstack-prisma-nextjs-blog&integration-ids=oac_eGEyJUf8jDjOQSCNJiyYRbfX)
 
