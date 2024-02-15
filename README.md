@@ -1,67 +1,80 @@
 # To-Do with Next.js and NextAuth.js on Railway
 
-This is a simple project that I made to help me with recurring tasks in life. I couldn't find a self prioritizing task list in any apps or other tools that I could find, so I built this! ToDo allows you to set up a bunch of recurring chores or tasks and will prioritize them based on frequency and date since last completion. 
+This is a simple project that I made to help me with recurring tasks in life. I couldn't find a self prioritizing task list in any apps or other tools that I could find, so I built this! ToDo allows you to set up a bunch of recurring chores or tasks and will prioritize them based on frequency and date since last completion.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fprisma%2Ffullstack-prisma-nextjs-blog&env=SECRET,GITHUB_ID,GITHUB_SECRET&project-name=fullstack-prisma-nextjs-blog&repo-name=fullstack-prisma-nextjs-blog&integration-ids=oac_eGEyJUf8jDjOQSCNJiyYRbfX)
-
-Without the Railway integration
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fprisma%2Ffullstack-prisma-nextjs-blog&env=DATABASE_URL,SECRET,GITHUB_ID,GITHUB_SECRET&project-name=fullstack-prisma-nextjs-blog&repo-name=fullstack-prisma-nextjs-blog)
-
-This is a starter that shows how to implement a **fullstack app in TypeScript with [Next.js](https://nextjs.org/)** with the following stack:
-
-- [React](https://reactjs.org/) (frontend)
+- [React](https://reactjs.org/)
 - [Next.js API routes](https://nextjs.org/docs/api-routes/introduction)
 - [Prisma Client](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client) (backend).
-- [NextAuth.js](https://next-auth.js.org/) for authentication. 
+- [NextAuth.js](https://next-auth.js.org/) for authentication.
 - [PostgreSQL](http://postgresql.org/) as the database of choice.
+- [Docker](https://www.docker.com/) local deployment containers for db
+- [Flowbite React](https://www.flowbite-react.com/) prebuild flowbite components for react
 
-Before you deploy the application to Vercel, ensure you
-- (Optional) Sign in to Railway and create a PostgreSQL database
-- Create a separate GitHub OAuth application before you deploy your application
-- Update the **Authorization callback URL** with the URL of the deployed app after successfully deploying the app
+This repo is connected to [Vercel](vercel.app) \(postgres db hosted through [Railway](railway.app)\) and will automatically build and deploy the application depending on the branch.
 
 Note that the app uses a mix of server-side rendering with `getServerSideProps` (SSR) and static site generation with `getStaticProps` (SSG). When possible, SSG is used to make database queries already at build-time (e.g. when fetching the [public feed](./pages/index.tsx)). Sometimes, the user requesting data needs to be authenticated, so SSR is being used to render data dynamically on the server-side (e.g. when viewing a user's [drafts](./pages/drafts.tsx)).
 
 ## Getting started
 
-### 1. Download and install dependencies
+### Download and install dependencies
+
+<details>
 
 Clone this repository:
 
 ```
-git clone git@github.com:prisma/prisma-nextjs-blog.git
+git clone git@github.com:jango2106/Todo.git
 ```
 
 Install npm dependencies:
 
 ```
-cd prisma-nextjs-blog
-npm install
+cd Todo
+npm i
 ```
 
 </details>
 
-### 2. Create and seed the database
+### Environment variables
 
-If you're using Docker on your computer, the following script to set up PostgreSQL database using the `docker-compose.yml` file at the root of your project:
+<details>
+
+An example of environment variables is in the `.env.example` file. To get the project running locally, you will need to create a `.env` file in the top level directory and replace the appropriate values.
+
+</details>
+
+### Create and seed local database
+
+<details>
+
+With Docker on your computer, the following command to set up PostgreSQL database using the `docker-compose.yml` file at the root of your project. Run the following command to create your PostgreSQL database. This also creates the `User`, `Post`, `Account`, `Session` and `VerificationToken` tables that are defined in [`prisma/schema.prisma`](./prisma/schema.prisma):
 
 ```
 npm run db:up
 ```
 
-Run the following command to create your PostgreSQL database. This also creates the `User`, `Post`, `Account`, `Session` and `VerificationToken` tables that are defined in [`prisma/schema.prisma`](./prisma/schema.prisma):
+With Docker on your computer, the next command will bring up an instance of [Prisma-Studio](https://www.prisma.io/studio) to view and manipulate the local development database.
 
 ```
-npx prisma migrate dev --name init
+npm run prisma-studio:up
 ```
 
-When `npx prisma migrate dev` is executed against a newly created database, seeding is also triggered. The seed file in [`prisma/seed.ts`](./prisma/seed.ts) will be executed and your database will be populated with the sample data.
+Check the package.json file for more helpful commands.
 
+</details>
 
-### 3. Configuring your authentication provider
+### Starting the app
 
-In order to get this example to work, you need to configure the [GitHub](https://next-auth.js.org/providers/github) authentication provider from NextAuth.js.
+<details>
+```
+npm run dev
+```
+
+The app is now running, navigate to [`http://localhost:3000/`](http://localhost:3000/) in your browser to explore its UI.
+
+</details>
+
+## Technical Documentation
 
 #### Configuring the GitHub authentication provider
 
@@ -84,208 +97,9 @@ Click on the **Register application** button, and then you will be able to find 
 The resulting section in the `.env` file might look like this:
 
 ```
-# GitHub oAuth
+# GitHub oAuth example
 GITHUB_ID=6bafeb321963449bdf51
 GITHUB_SECRET=509298c32faa283f28679ad6de6f86b2472e1bff
 ```
 
 </details>
-
-
-### 4. Start the app
-
-```
-npm run dev
-```
-
-The app is now running, navigate to [`http://localhost:3000/`](http://localhost:3000/) in your browser to explore its UI.
-
-## Evolving the app
-
-Evolving the application typically requires three steps:
-
-1. Migrate your database using Prisma Migrate
-1. Update your server-side application code
-1. Build new UI features in React
-
-For the following example scenario, assume you want to add a "profile" feature to the app where users can create a profile and write a short bio about themselves.
-
-### 1. Migrate your database using Prisma Migrate
-
-The first step is to add a new table, e.g. called `Profile`, to the database. You can do this by adding a new model to your [Prisma schema file](./prisma/schema.prisma) file and then running a migration afterwards:
-
-```diff
-// schema.prisma
-
-model Post {
-  id        Int     @default(autoincrement()) @id
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User?   @relation(fields: [authorId], references: [id])
-  authorId  Int
-}
-
-model User {
-  id      Int      @default(autoincrement()) @id 
-  name    String? 
-  email   String   @unique
-  posts   Post[]
-+ profile Profile?
-}
-
-+model Profile {
-+  id     Int     @default(autoincrement()) @id
-+  bio    String?
-+  userId Int     @unique
-+  user   User    @relation(fields: [userId], references: [id])
-+}
-```
-
-Once you've updated your data model, you can execute the changes against your database with the following command:
-
-```
-npx prisma migrate dev
-```
-
-### 2. Update your application code
-
-You can now use your `PrismaClient` instance to perform operations against the new `Profile` table. Here are some examples:
-
-#### Create a new profile for an existing user
-
-```ts
-const profile = await prisma.profile.create({
-  data: {
-    bio: "Hello World",
-    user: {
-      connect: { email: "alice@prisma.io" },
-    },
-  },
-});
-```
-
-#### Create a new user with a new profile
-
-```ts
-const user = await prisma.user.create({
-  data: {
-    email: "john@prisma.io",
-    name: "John",
-    profile: {
-      create: {
-        bio: "Hello World",
-      },
-    },
-  },
-});
-```
-
-#### Update the profile of an existing user
-
-```ts
-const userWithUpdatedProfile = await prisma.user.update({
-  where: { email: "alice@prisma.io" },
-  data: {
-    profile: {
-      update: {
-        bio: "Hello Friends",
-      },
-    },
-  },
-});
-```
-
-
-### 3. Build new UI features in React
-
-Once you have added a new endpoint to the API (e.g. `/api/profile` with `/POST`, `/PUT` and `GET` operations), you can start building a new UI component in React. It could e.g. be called `profile.tsx` and would be located in the `pages` directory.
-
-In the application code, you can access the new endpoint via `fetch` operations and populate the UI with the data you receive from the API calls.
-
-
-## Switch to another database (e.g. PostgreSQL, MySQL, SQL Server, MongoDB)
-
-If you want to try this example with another database than SQLite, you can adjust the the database connection in [`prisma/schema.prisma`](./prisma/schema.prisma) by reconfiguring the `datasource` block. 
-
-Learn more about the different connection configurations in the [docs](https://www.prisma.io/docs/reference/database-reference/connection-urls).
-
-<details><summary>Expand for an overview of example configurations with different databases</summary>
-
-### PostgreSQL
-
-For PostgreSQL, the connection URL has the following structure:
-
-```prisma
-datasource db {
-  provider = "postgresql"
-  url      = "postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=SCHEMA"
-}
-```
-
-Here is an example connection string with a local PostgreSQL database:
-
-```prisma
-datasource db {
-  provider = "postgresql"
-  url      = "postgresql://janedoe:mypassword@localhost:5432/notesapi?schema=public"
-}
-```
-
-### MySQL
-
-For MySQL, the connection URL has the following structure:
-
-```prisma
-datasource db {
-  provider = "mysql"
-  url      = "mysql://USER:PASSWORD@HOST:PORT/DATABASE"
-}
-```
-
-Here is an example connection string with a local MySQL database:
-
-```prisma
-datasource db {
-  provider = "mysql"
-  url      = "mysql://janedoe:mypassword@localhost:3306/notesapi"
-}
-```
-
-### Microsoft SQL Server
-
-Here is an example connection string with a local Microsoft SQL Server database:
-
-```prisma
-datasource db {
-  provider = "sqlserver"
-  url      = "sqlserver://localhost:1433;initial catalog=sample;user=sa;password=mypassword;"
-}
-```
-
-### MongoDB
-
-Here is an example connection string with a local MongoDB database:
-
-```prisma
-datasource db {
-  provider = "mongodb"
-  url      = "mongodb://USERNAME:PASSWORD@HOST/DATABASE?authSource=admin&retryWrites=true&w=majority"
-}
-```
-Because MongoDB is currently in [Preview](https://www.prisma.io/docs/about/releases#preview), you need to specify the `previewFeatures` on your `generator` block:
-
-```
-generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["mongodb"]
-}
-```
-</details>
-
-## Next steps
-
-- Check out the [Prisma docs](https://www.prisma.io/docs)
-- Share your feedback in the [`prisma2`](https://prisma.slack.com/messages/CKQTGR6T0/) channel on the [Prisma Slack](https://slack.prisma.io/)
-- Create issues and ask questions on [GitHub](https://github.com/prisma/prisma/)
-- Watch our biweekly "What's new in Prisma" livestreams on [Youtube](https://www.youtube.com/channel/UCptAHlN1gdwD89tFM3ENb6w)
